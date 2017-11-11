@@ -1,6 +1,10 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
 
+const rnd = (min, max) => {
+  return Math.random() * (max - min) + min;
+}
+
 export default class extends Phaser.State {
   init () {
     this.style = {
@@ -18,6 +22,7 @@ export default class extends Phaser.State {
   preload () {}
 
   create () {
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
     const t = document.getElementById('text')
     const range = document.createRange()
@@ -32,11 +37,16 @@ export default class extends Phaser.State {
         range.toString(),
         this.style)
       text.anchor.set(0)
-
+      this.game.physics.arcade.enable(text)
+      text.body.bounce.y = 1
+//      text.body.gravity.y = rnd(0, -i / 10000)
+      text.body.collideWorldBounds = true
     }
 
   }
+  update () {
 
+  }
   render () {
 
   }
