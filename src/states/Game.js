@@ -12,8 +12,10 @@ export default class extends Phaser.State {
     }
   }
   create () {
-    this.game.world.setBounds(0, 0, 1400, 800)
+
+//    this.game.world.setBounds(0, 0, this.game.config.gameWidth, this.game.config.gameHeight)
     this.game.physics.startSystem(Phaser.Physics.P2JS)
+    game.physics.p2.applyDamping = false
     this.game.renderer.renderSession.roundPixels = true
 
     this.letters = this.game.add.group()
@@ -22,7 +24,11 @@ export default class extends Phaser.State {
     const t = document.getElementById('text')
     const range = document.createRange()
 
-    const effect = sample([sink, float, bump, drift, shift])
+    const effect = sample([sink, float, bump, drift, shift, crunch])
+    const worldMaterial = game.physics.p2.createMaterial('worldMaterial')
+    game.physics.p2.setWorldMaterial(worldMaterial, true, true, true, true)
+
+    console.log(effect)
 
     for (let i = 1;i < t.textContent.length + 1; i++) {
       range.setStart(t.firstChild, i-1)
@@ -40,19 +46,18 @@ export default class extends Phaser.State {
           text.body.clearShapes()
 
           text.body.static = true
+          let textMaterial = this.game.physics.p2.createMaterial('textMateral', text.body)
+          let contact = game.physics.p2.createContactMaterial(textMaterial, worldMaterial)
 
           const opts = {
             index: i,
             rate: i / rng(250, 1000),
+            collisions: collisions,
+            material: contact
           }
           text.body.static = false
           effect(text, opts)
-
-          // text.body.setCollisionGroup(collisions)
-          // text.body.collides([collisions])
-
           this.letters.add(text)
-
       }
     }
   }
@@ -67,12 +72,29 @@ const sink = (text, opts) => {
 
 const float = (text, opts) => {
   text.body.setRectangle(4)
-  text.body.velocity.y = -rng(1, opts.rate)
+  text.body.velocity.y = -rng(100, 100 + opts.rate)
+}
+
+const crunch = (text, opts) => {
+  text.body.setRectangle(4)
+  text.body.velocity.x = -rng(200, 200 + opts.rate)
+}
+
+const springy = (text, opts) => {
+  text.body.setRectangle(4)
+  text.body.velocity.x = -rng(400, 400 + opts.rate)
 }
 
 const shift = (text, opts) => {
-  text.body.velocity.y = rng(-20, 20)
+  text.body.velocity.y = -rng(0, 20 + opts.rate)
 }
+
+const spin = (text, opts) => {
+  text.body.setRectangle(4)
+  text.body.angularVelocity = -rng(-1, 1)
+  text.body.velocity.y = -rng(20, 20 + opts.rate)
+}
+
 const bump = (text, opts) => {
   text.body.velocity.x = rng(-2, 2)
   text.body.velocity.y = rng(-2, 2)
@@ -80,7 +102,7 @@ const bump = (text, opts) => {
 }
 
 const drift = (text, opts) => {
-  text.body.velocity.y = rng(opts.rate, opts.rate * 5)
+  text.body.velocity.y = rng(opts.rate, opts.rate * 100)
 }
 
 const sample = (arr) => {

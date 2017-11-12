@@ -10,8 +10,8 @@ import config from './config'
 class Game extends Phaser.Game {
   constructor () {
     const docElement = document.documentElement
-    const width = 1400
-    const height = 800
+    const width = config.gameWidth
+    const height = config.gameHeight
 
     super(width, height, Phaser.CANVAS, 'content', null)
 
