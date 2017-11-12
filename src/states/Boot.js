@@ -16,7 +16,7 @@ export default class extends Phaser.State {
       },
       active: this.fontsLoaded
     })
-    this.game.load.json('book', '/data/book.json')
+    this.game.load.json('book', 'data/book.json')
   }
   create () {
     const book = this.game.cache.getJSON('book')

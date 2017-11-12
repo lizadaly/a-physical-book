@@ -23,12 +23,15 @@ export default class extends Phaser.State {
 
     const t = document.getElementById('text')
     const range = document.createRange()
+    const fadeFactor = rng(100, 400)
+    const _fadeRight = fadeRight.bind(null, fadeFactor)
+    const _fadeLeft = fadeLeft.bind(null, fadeFactor)
+    const effect = sample([sink, squish, bump, drift, shift,
+      spin, springy, crunch, _fadeLeft, _fadeRight,
+      slantLeft, slantRight])
 
-    const effect = sample([sink, float, bump, drift, shift, crunch])
     const worldMaterial = game.physics.p2.createMaterial('worldMaterial')
     game.physics.p2.setWorldMaterial(worldMaterial, true, true, true, true)
-
-    console.log(effect)
 
     for (let i = 1;i < t.textContent.length + 1; i++) {
       range.setStart(t.firstChild, i-1)
@@ -53,7 +56,9 @@ export default class extends Phaser.State {
             index: i,
             rate: i / rng(250, 1000),
             collisions: collisions,
-            material: contact
+            material: contact,
+            x: rect.x,
+            y: rect.y
           }
           text.body.static = false
           effect(text, opts)
@@ -65,14 +70,37 @@ export default class extends Phaser.State {
 
   }
 }
+const fadeLeft = (factor, text, opts) => {
+  const fade = Math.min(opts.x / factor, 1)
+  text.addColor(`rgba(0,0,0,${fade})`, 0)
+}
+
+const fadeRight = (factor, text, opts) => {
+  const fade = 1 - Math.min(opts.x / factor, 1)
+  text.addColor(`rgba(0,0,0,${fade})`, 0)
+}
+
 const sink = (text, opts) => {
   text.body.velocity.y = rng(100, 100 + opts.rate)
   text.body.setCircle(text.width)
 }
 
-const float = (text, opts) => {
+const squish = (text, opts) => {
   text.body.setRectangle(4)
-  text.body.velocity.y = -rng(100, 100 + opts.rate)
+  const acc = opts.y - 100
+  text.body.velocity.y = -rng(acc, acc + opts.rate)
+}
+
+const slantRight = (text, opts) => {
+  text.body.setRectangle(4)
+  const acc = opts.y + rng(opts.x, opts.x - 50)
+  text.body.velocity.y = -rng(acc, acc + opts.rate)
+}
+
+const slantLeft = (text, opts) => {
+  text.body.setRectangle(4)
+  const acc = opts.y - rng(opts.x, opts.x - 50)
+  text.body.velocity.y = -rng(acc, acc + opts.rate)
 }
 
 const crunch = (text, opts) => {
@@ -82,7 +110,7 @@ const crunch = (text, opts) => {
 
 const springy = (text, opts) => {
   text.body.setRectangle(4)
-  text.body.velocity.x = -rng(400, 400 + opts.rate)
+  text.body.velocity.x = rng(400, 400 + opts.rate)
 }
 
 const shift = (text, opts) => {

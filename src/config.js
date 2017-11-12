@@ -1,6 +1,6 @@
 export default {
-  gameWidth: 1400,
-  gameHeight: 800,
+  gameWidth: 500,
+  gameHeight: 600,
   localStorageName: 'the-physical-book',
   resolution: window.devicePixelRatio
 }

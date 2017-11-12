@@ -13,8 +13,9 @@ def quitting(thing):
 
 
 with quitting(webdriver.Firefox()) as driver:
+    driver.set_window_size(500, 600)
     for i in range(0, CHAPTERS):
+        driver.get('http://localhost/github/the-physical-book/?chapter={}'.format(i))
+        time.sleep(2)
         print("Snapping chapter {}".format(i))
-        driver.get('http://localhost:3000/?chapter={}'.format(i))
-        time.sleep(5)
         driver.get_screenshot_as_file('images/{}.png'.format(i))
