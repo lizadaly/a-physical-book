@@ -26,9 +26,10 @@ export default class extends Phaser.State {
     const fadeFactor = rng(100, 400)
     const _fadeRight = fadeRight.bind(null, fadeFactor)
     const _fadeLeft = fadeLeft.bind(null, fadeFactor)
-    const effect = sample([sink, squish, bump, drift, shift,
+    const effect = sample([splatter, squish, bump, drift, shift,
       spin, springy, crunch, _fadeLeft, _fadeRight,
-      slantLeft, slantRight, splitX, splitY, cross, splitRL])
+      slantLeft, slantRight, splitX, splitY, cross, crossPass,
+      splitRL, blob, bullet])
 
     const worldMaterial = game.physics.p2.createMaterial('worldMaterial')
     game.physics.p2.setWorldMaterial(worldMaterial, true, true, true, true)
@@ -47,7 +48,7 @@ export default class extends Phaser.State {
           text.body.y += text.height / 2;
           text.body.clearShapes()
 
-          text.body.damping = rng(0.5, 0.9) 
+          text.body.damping = rng(0.7, 0.9)
 
           text.body.static = true
           let textMaterial = this.game.physics.p2.createMaterial('textMateral', text.body)
@@ -83,13 +84,13 @@ const fadeRight = (factor, text, opts) => {
   text.addColor(`rgba(0,0,0,${fade})`, 0)
 }
 
-const sink = (text, opts) => {
+const splatter = (text, opts) => {
   text.body.velocity.y = rng(100, 100 + opts.rate)
   text.body.setCircle(text.width)
 }
 
 const squish = (text, opts) => {
-  text.body.setRectangle(4)
+  text.body.setRectangle(text.width)
   const acc = opts.y - 100
   text.body.velocity.y = -rng(acc, acc + opts.rate)
 }
@@ -146,9 +147,10 @@ const splitRL = (text, opts) => {
   text.body.velocity.x = acc
 }
 
-const cross = (text, opts) => {
-  text.body.setRectangle(4)
-  let acc = rng(opts.x, opts.x - 100)
+const crossPass = (text, opts) => {
+  text.body.damping = rng(0.8, 1.0)
+  text.body.setRectangle(1)
+  let acc = rng(opts.x / 2.0, opts.x * 1.5)
   if (opts.y > opts.height / 2) {
     acc = -acc
   }
@@ -158,10 +160,40 @@ const cross = (text, opts) => {
   text.body.velocity.y = acc
 }
 
+const cross = (text, opts) => {
+  text.body.damping = rng(0.8, 1.0)
+  text.body.setRectangle(text.width)
+  let acc = rng(opts.x / 2.0, opts.x * 1.5)
+  if (opts.y > opts.height / 2) {
+    acc = -acc
+  }
+  else {
+    acc = acc
+  }
+  text.body.velocity.y = acc
+}
 
 const crunch = (text, opts) => {
   text.body.setRectangle(4)
   text.body.velocity.x = -rng(200, 200 + opts.rate)
+}
+
+const blob = (text, opts) => {
+  text.body.setRectangle(1)
+  if (Math.floor(Math.random() * 200) === 0) {
+    text.body.setCircle(text.width * 4)
+  }
+}
+
+const bullet = (text, opts) => {
+  text.body.damping = rng(0.85, 0.95)
+  text.body.setRectangle(1)
+  if (Math.floor(Math.random() * 200) === 0) {
+    text.body.setRectangle(text.width)
+    text.body.velocity.x = 300
+    text.body.velocity.y = 300
+    text.body.damping = rng(-10, -1)
+  }
 }
 
 const springy = (text, opts) => {
@@ -175,7 +207,7 @@ const shift = (text, opts) => {
 
 const spin = (text, opts) => {
   text.body.setRectangle(4)
-  text.body.angularVelocity = -rng(-1, 1)
+  text.body.angularVelocity = -rng(-0.2, 0.2)
   text.body.velocity.y = -rng(20, 20 + opts.rate)
 }
 
