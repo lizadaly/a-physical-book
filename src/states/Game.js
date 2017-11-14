@@ -15,7 +15,7 @@ export default class extends Phaser.State {
 
 //    this.game.world.setBounds(0, 0, this.game.config.gameWidth, this.game.config.gameHeight)
     this.game.physics.startSystem(Phaser.Physics.P2JS)
-    game.physics.p2.applyDamping = false
+//    game.physics.p2.applyDamping = false
     this.game.renderer.renderSession.roundPixels = true
 
     this.letters = this.game.add.group()
@@ -28,11 +28,10 @@ export default class extends Phaser.State {
     const _fadeLeft = fadeLeft.bind(null, fadeFactor)
     const effect = sample([sink, squish, bump, drift, shift,
       spin, springy, crunch, _fadeLeft, _fadeRight,
-      slantLeft, slantRight])
+      slantLeft, slantRight, splitX, splitY, cross, splitRL])
 
     const worldMaterial = game.physics.p2.createMaterial('worldMaterial')
     game.physics.p2.setWorldMaterial(worldMaterial, true, true, true, true)
-
     for (let i = 1;i < t.textContent.length + 1; i++) {
       range.setStart(t.firstChild, i-1)
       range.setEnd(t.firstChild, i)
@@ -48,6 +47,8 @@ export default class extends Phaser.State {
           text.body.y += text.height / 2;
           text.body.clearShapes()
 
+          text.body.damping = rng(0.5, 0.9) 
+
           text.body.static = true
           let textMaterial = this.game.physics.p2.createMaterial('textMateral', text.body)
           let contact = game.physics.p2.createContactMaterial(textMaterial, worldMaterial)
@@ -58,7 +59,9 @@ export default class extends Phaser.State {
             collisions: collisions,
             material: contact,
             x: rect.x,
-            y: rect.y
+            y: rect.y,
+            width: this.game.width,
+            height: this.game.height
           }
           text.body.static = false
           effect(text, opts)
@@ -102,6 +105,59 @@ const slantLeft = (text, opts) => {
   const acc = opts.y - rng(opts.x, opts.x - 50)
   text.body.velocity.y = -rng(acc, acc + opts.rate)
 }
+
+/* Right goes down, left goes up */
+const splitY = (text, opts) => {
+  text.body.setRectangle(4)
+  let acc
+  // If we're on the right side, go up
+  if (opts.x > opts.width / 2) {
+    acc = opts.y + rng(opts.x, opts.x - 50)
+  }
+  else {
+    acc = opts.y - rng(opts.x, opts.x - 50)
+  }
+  text.body.velocity.y = -rng(acc, acc + opts.rate)
+}
+
+/* Top goes up, bottom goes down */
+const splitX = (text, opts) => {
+  text.body.setRectangle(4)
+  let acc = rng(opts.y, opts.y - 50)
+  if (opts.y > opts.height / 2) {
+    acc = acc
+  }
+  else {
+    acc = -acc
+  }
+  text.body.velocity.y = acc
+}
+
+/* Top goes left, bottom goes right */
+const splitRL = (text, opts) => {
+  text.body.setRectangle(4)
+  let acc = rng(opts.y, opts.y - 50)
+  if (opts.y > opts.height / 2) {
+    acc = acc
+  }
+  else {
+    acc = -acc
+  }
+  text.body.velocity.x = acc
+}
+
+const cross = (text, opts) => {
+  text.body.setRectangle(4)
+  let acc = rng(opts.x, opts.x - 100)
+  if (opts.y > opts.height / 2) {
+    acc = -acc
+  }
+  else {
+    acc = acc
+  }
+  text.body.velocity.y = acc
+}
+
 
 const crunch = (text, opts) => {
   text.body.setRectangle(4)
