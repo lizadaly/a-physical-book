@@ -1,5 +1,5 @@
 # A Physical Book
-### For National Novel Generation Month 2017
+### For <a href="https://github.com/NaNoGenMo/2017">National Novel Generation Month 2017</a>
 Liza Daly
 
 _A Physical Book_ makes a digitized book “physical” by rendering it in a simulated space where properties like gravity, friction, and velocity all apply. The program randomly perturbs the letters, then takes a snapshot at a point in time, re-assembling the images into a new, “un-digitized” book.
