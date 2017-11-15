@@ -22,7 +22,7 @@ _A Physical Book_ uses the web-based game engine <a href="https://phaser.io">Pha
 
 For each page, one of a dozen transformations is applied to give the text varying physical properties, such as mass, acceleration, collision, or opacity.
 
-On page load, the requested chapter number is rendered, the transformation is assigned, and the world is allowed to run. A Selenium wrapper script calls all 500 chapters in succession, taking a screenshot at a random point in the animation:
+On page load, the requested chapter number is rendered, the transformation is assigned, and the world is allowed to run. A Selenium wrapper script calls all 500 pages in succession, taking a screenshot at a random point in the animation:
 
 <img src="examples/animation.gif">
 
