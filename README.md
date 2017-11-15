@@ -1,102 +1,28 @@
-# Phaser + ES6 + Webpack.
-#### A bootstrap project to create games with Phaser + ES6 + Webpack.
+# A Physical Book
+### For National Novel Generation Month 2017
+Liza Daly
 
-![Phaser+ES6+Webpack](https://raw.githubusercontent.com/lean/phaser-es6-webpack/master/assets/images/phaser-es6-webpack.jpg)
+_A Physical Book_ makes a digitized book “physical” by rendering it in a simulated space with properties like gravity, friction, and velocity, then randomly perturbing one or more of the letters.
 
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+The raw, uncorrected scanned text of _<a href="https://publicdomainreview.org/collections/the-up-to-date-sandwich-book-400-ways-to-make-a-sandwich-1909/">The Up-To-Date Sandwich Book: 400 Ways to Make a Sandwich (1909)</a>_ is first rendered in a browser window, then one of a dozen random transformations is applied to it. The final “book” is 251 pages (50,964 words) of facing pages following the order of the original text.
 
+<img src="examples/sample7.png">
+<img src="examples/sample1.png">
+<img src="examples/sample2.png">
+<img src="examples/sample4.png">
+<img src="examples/sample6.png">
 
-## Features
-- ESLINT with JavaScript Standard Style configuration
-- Next generation of Javascript
-- Browsers are automatically updated as you change project files
-- Webpack ready
-- WebFont Loader
+### Implementation
+_A Physical Book_ uses the web-based game engine <a href="https://phaser.io">Phaser</a>. Each page of the book is rendered into an invisible `<div>` (to produce correct leading and line-height), then copied letter-by-letter into the Phaser game world.
 
-## Typescript 
-If you need typescript support checkout the ```typescript``` branch. Thanks to @MatsMaker
+For each page, one of a dozen transformations is applied to give the text varying physical properties, such as mass, acceleration, collision, or opacity.
 
-# Setup
-You'll need to install a few things before you have a working copy of the project.
+On page load, the requested chapter number is rendered and the animation is run. A Selenium wrapper script calls all 500 chapters in succession, taking a screenshot at a random point in the animation:
 
-## 1. Clone this repo:
+<img src="examples/animation.gif">
 
-Navigate into your workspace directory.
+The final book is rendered in a two-page spread PDF.
 
-Run:
+<a href="nanogenmo2017-lizadaly-small.pdf">Small 30 page sample</a>.
 
-```git clone https://github.com/lean/phaser-es6-webpack.git```
-
-## 2. Install node.js and npm:
-
-https://nodejs.org/en/
-
-
-## 3. Install dependencies (optionally you can install [yarn](https://yarnpkg.com/)):
-
-Navigate to the cloned repo's directory.
-
-Run:
-
-```npm install``` 
-
-or if you chose yarn, just run ```yarn```
-
-## 4. Run the development server:
-
-Run:
-
-```npm run dev```
-
-This will run a server so you can run the game in a browser. It will also start a watch process, so you can change the source and the process will recompile and refresh the browser automatically.
-
-To run the game, open your browser and enter http://localhost:3000 into the address bar.
-
-
-## Build for deployment:
-
-Run:
-
-```npm run deploy```
-
-This will optimize and minimize the compiled bundle.
-
-## Deploy for cordova:
-Make sure to uncomment the cordova.js file in the src/index.html and to update config.xml with your informations. (name/description...)
-
-More informations about the cordova configuration:
-https://cordova.apache.org/docs/en/latest/config_ref/
-
-There is 3 platforms actually tested and supported : 
-- browser
-- ios
-- android
-
-First run (ios example):
-
-```
-npm run cordova
-cordova platform add ios
-cordova run ios
-```
-
-Update (ios example):
-
-```
-npm run cordova
-cordova platform update ios
-cordova run ios
-```
-
-This will optimize and minimize the compiled bundle.
-
-## Credits
-Big thanks to these great repos:
-
-https://github.com/belohlavek/phaser-es6-boilerplate
-
-https://github.com/cstuncsik/phaser-es6-demo
-
-## Contributors
-
-https://github.com/RenaudROHLINGER
+<a href="https://www.dropbox.com/s/lphwafia5qskokt/nanogenmo2017-lizadaly.pdf?dl=0">Full 50,000+ word, 250 page PDF</a> (55MB)
