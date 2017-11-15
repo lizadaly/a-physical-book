@@ -9,8 +9,6 @@ The raw, uncorrected scanned text of _<a href="https://publicdomainreview.org/co
 <img src="examples/sample7.png">
 <img src="examples/sample1.png">
 <img src="examples/sample2.png">
-<img src="examples/sample4.png">
-<img src="examples/sample6.png">
 
 ### Implementation
 _A Physical Book_ uses the web-based game engine <a href="https://phaser.io">Phaser</a>. Each page of the book is rendered into an invisible `<div>` (to produce correct leading and line-height), then copied letter-by-letter into the Phaser game world.
@@ -26,3 +24,6 @@ The final book is rendered in a two-page spread PDF.
 <a href="nanogenmo2017-lizadaly-small.pdf">Small 30 page sample</a>.
 
 <a href="https://www.dropbox.com/s/lphwafia5qskokt/nanogenmo2017-lizadaly.pdf?dl=0">Full 50,000+ word, 250 page PDF</a> (55MB)
+
+<img src="examples/sample4.png">
+<img src="examples/sample6.png">
