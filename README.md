@@ -31,3 +31,5 @@ The final book is rendered in a two-page spread PDF.
 <a href="nanogenmo2017-lizadaly-small.pdf">Small 30 page sample</a>.
 
 <a href="https://www.dropbox.com/s/lphwafia5qskokt/nanogenmo2017-lizadaly.pdf?dl=0">Full 50,000+ word, 250 page PDF</a> (55MB)
+
+In a hilarious bit of recursion, it is also being hosted on <a href="https://archive.org/details/a_physical_book_liza_daly">The Internet Archive</a>, where the book scan originated.
