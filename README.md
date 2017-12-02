@@ -4,6 +4,8 @@ Liza Daly
 
 _A Physical Book_ makes a digitized book “physical” by rendering it in a simulated space where properties like gravity, friction, and velocity all apply. The program randomly perturbs the letters, then takes a snapshot at a point in time, re-assembling the images into a new, “un-digitized” book.
 
+<a href="https://lizadaly.com/projects/a-physical-book/">Live demo</a>
+
 The raw, uncorrected scanned text of _<a href="https://publicdomainreview.org/collections/the-up-to-date-sandwich-book-400-ways-to-make-a-sandwich-1909/">The Up-To-Date Sandwich Book: 400 Ways to Make a Sandwich (1909)</a>_ is re-imagined as this 251 page (50,964 words) book:
 
 <img src="examples/sample7.png">
