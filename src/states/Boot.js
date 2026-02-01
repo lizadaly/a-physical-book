@@ -15,19 +15,13 @@ export default class extends Phaser.State {
       },
       active: this.fontsLoaded
     })
-
-    const { bookData } = this.game._bookConfig || {}
-    this.game.load.json('book', bookData || 'data/book.json')
   }
 
   create () {
-    const book = this.game.cache.getJSON('book')
-    const { chapter: chapterIndex = 0 } = this.game._bookConfig || {}
-
-    if (book.length - 1 >= chapterIndex) {
-      const chapter = book[chapterIndex]
-      const text = chapter.join('\n')
-      document.getElementById('text').innerHTML = text
+    const { text } = this.game._bookConfig || {}
+    const textEl = document.getElementById('text')
+    if (text) {
+      textEl.textContent = text
     }
   }
 

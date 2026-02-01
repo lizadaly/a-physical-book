@@ -9,16 +9,6 @@ const sample = (arr) => {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-const fadeLeft = (factor, text, opts) => {
-  const fade = Math.min(opts.x / factor, 1)
-  text.addColor(`rgba(0,0,0,${fade})`, 0)
-}
-
-const fadeRight = (factor, text, opts) => {
-  const fade = 1 - Math.min(opts.x / factor, 1)
-  text.addColor(`rgba(0,0,0,${fade})`, 0)
-}
-
 const splatter = (text, opts) => {
   text.body.velocity.y = rng(100, 100 + opts.rate)
   text.body.setCircle(text.width)
@@ -143,7 +133,12 @@ const drift = (text, opts) => {
   text.body.velocity.y = rng(opts.rate, opts.rate * 100)
 }
 
+const normal = (text) => {
+  text.body.static = true
+}
+
 export const EFFECTS = {
+  normal,
   splatter,
   squish,
   bump,
@@ -152,8 +147,6 @@ export const EFFECTS = {
   spin,
   springy,
   crunch,
-  fadeLeft: fadeLeft.bind(null, rng(100, 400)),
-  fadeRight: fadeRight.bind(null, rng(100, 400)),
   slantLeft,
   slantRight,
   splitX,
@@ -183,6 +176,7 @@ export default class extends Phaser.State {
     const collisions = this.game.physics.p2.createCollisionGroup()
 
     const t = document.getElementById('text')
+    const textRect = t.getBoundingClientRect()
     const range = document.createRange()
 
     const effectName = this.game._bookConfig && this.game._bookConfig.effect
@@ -199,16 +193,16 @@ export default class extends Phaser.State {
       : Object.keys(EFFECTS).find(k => EFFECTS[k] === effect) || 'unknown'
     this.game._resolvedEffect = resolvedName
 
-    const worldMaterial = game.physics.p2.createMaterial('worldMaterial')
-    game.physics.p2.setWorldMaterial(worldMaterial, true, true, true, true)
+    const worldMaterial = this.game.physics.p2.createMaterial('worldMaterial')
+    this.game.physics.p2.setWorldMaterial(worldMaterial, true, true, true, true)
     for (let i = 1;i < t.textContent.length + 1; i++) {
       range.setStart(t.firstChild, i-1)
       range.setEnd(t.firstChild, i)
       if (range.toString() !== ' ' && range.toString() !== '\n') {
         let rect = range.getBoundingClientRect()
         let text = this.game.add.text(
-          rect.x,
-          rect.y,
+          rect.x - textRect.left,
+          rect.y - textRect.top,
           range.toString(),
           this.style)
           this.game.physics.p2.enable(text)
@@ -220,15 +214,15 @@ export default class extends Phaser.State {
 
           text.body.static = true
           let textMaterial = this.game.physics.p2.createMaterial('textMateral', text.body)
-          let contact = game.physics.p2.createContactMaterial(textMaterial, worldMaterial)
+          let contact = this.game.physics.p2.createContactMaterial(textMaterial, worldMaterial)
 
           const opts = {
             index: i,
             rate: i / rng(250, 1000),
             collisions: collisions,
             material: contact,
-            x: rect.x,
-            y: rect.y,
+            x: rect.x - textRect.left,
+            y: rect.y - textRect.top,
             width: this.game.width,
             height: this.game.height
           }

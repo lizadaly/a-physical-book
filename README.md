@@ -4,7 +4,7 @@ Liza Daly
 
 _A Physical Book_ makes a digitized book “physical” by rendering it in a simulated space where properties like gravity, friction, and velocity all apply. The program randomly perturbs the letters, then takes a snapshot at a point in time, re-assembling the images into a new, “un-digitized” book.
 
-<a href="https://lizadaly.com/projects/a-physical-book/">Live demo</a>
+<a href="https://procedural-art/a-physical-book/">Live demo</a>
 
 The raw, uncorrected scanned text of _<a href="https://publicdomainreview.org/collections/the-up-to-date-sandwich-book-400-ways-to-make-a-sandwich-1909/">The Up-To-Date Sandwich Book: 400 Ways to Make a Sandwich (1909)</a>_ is re-imagined as this 251 page (50,964 words) book:
 
@@ -39,18 +39,20 @@ This produces ESM and UMD bundles in `dist/`. Import and call `createPhysicalBoo
 ```js
 import { createPhysicalBook } from 'a-physical-book'
 
-const game = createPhysicalBook(document.getElementById('container'), {
-  chapter: 0,        // chapter index (default: 0)
-  bookData: 'data/book.json'  // URL to book JSON (optional)
+const game = createPhysicalBook('#container', {
+  text: 'Your plain text here...',  // text content to render
+  effect: 'splatter'                // effect name (optional, random if omitted)
 })
 ```
+
+Available effects: `normal`, `splatter`, `squish`, `bump`, `rain`, `wind`, `spin`, `springy`, `crunch`, `slantLeft`, `slantRight`, `splitX`, `splitY`, `drift`. If no effect is specified, one is chosen at random. You can also import `effectNames` for the full list.
 
 ### Implementation
 _A Physical Book_ uses the web-based game engine <a href="https://phaser.io">Phaser CE</a>. Each page of the book is rendered into an invisible `<div>` (to produce correct leading and line-height), then copied into the Phaser game world with each letter instantiated as a distinct addressable sprite.
 
-For each page, one of a dozen transformations is applied to give the text varying physical properties, such as mass, acceleration, collision, or opacity.
+For each page, one of a dozen transformations is applied to give the text varying physical properties, such as mass, acceleration, collision, or spin.
 
-On page load, the requested chapter number is rendered, the transformation is assigned, and the world is allowed to run. A Selenium wrapper script calls all 500 pages in succession, taking a screenshot at a random point in the animation:
+On page load, the provided text is rendered, the transformation is assigned, and the world is allowed to run. A Selenium wrapper script calls all 500 pages in succession, taking a screenshot at a random point in the animation:
 
 <img src="examples/animation.gif">
 
