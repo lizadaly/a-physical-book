@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>A physical book</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: white;
+        }
+        #book-container canvas {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="book-container"></div>
+    <script type="module">
+        import { createPhysicalBook } from './src/main.js'
+        createPhysicalBook(document.getElementById('book-container'), {
+            chapter: new URLSearchParams(location.search).get('chapter') || 0
+        })
+    </script>
+</body>
+
+</html>

@@ -19,8 +19,34 @@ The raw, uncorrected scanned text of _<a href="https://publicdomainreview.org/co
 <img src="examples/sample2.png">
 
 
+### Usage
+
+Install dependencies and run the dev server:
+
+```
+npm install
+npm run dev
+```
+
+To build the library for embedding in another site:
+
+```
+npm run build
+```
+
+This produces ESM and UMD bundles in `dist/`. Import and call `createPhysicalBook`:
+
+```js
+import { createPhysicalBook } from 'a-physical-book'
+
+const game = createPhysicalBook(document.getElementById('container'), {
+  chapter: 0,        // chapter index (default: 0)
+  bookData: 'data/book.json'  // URL to book JSON (optional)
+})
+```
+
 ### Implementation
-_A Physical Book_ uses the web-based game engine <a href="https://phaser.io">Phaser</a>. Each page of the book is rendered into an invisible `<div>` (to produce correct leading and line-height), then copied into the Phaser game world with each letter instantiated as a distinct addressable sprite.
+_A Physical Book_ uses the web-based game engine <a href="https://phaser.io">Phaser CE</a>. Each page of the book is rendered into an invisible `<div>` (to produce correct leading and line-height), then copied into the Phaser game world with each letter instantiated as a distinct addressable sprite.
 
 For each page, one of a dozen transformations is applied to give the text varying physical properties, such as mass, acceleration, collision, or opacity.
 

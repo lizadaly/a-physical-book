@@ -1,10 +1,7 @@
 node_modules/
-www/
-platforms/
-plugins/
 dist/
 .vscode/
+.claude/
 *.log
 package-lock.json
-/index.html
 images
