@@ -6,7 +6,6 @@ export default class extends Phaser.State {
     this.stage.backgroundColor = '#FFFFFF'
     this.fontsReady = false
     this.fontsLoaded = this.fontsLoaded.bind(this)
-    this.bookLoaded = this.bookLoaded.bind(this)
   }
 
   preload () {
@@ -16,21 +15,16 @@ export default class extends Phaser.State {
       },
       active: this.fontsLoaded
     })
-    this.game.load.json('book', 'data/book.json')
   }
+
   create () {
-    const book = this.game.cache.getJSON('book')
-    // Join all the lines of the current chapter (0)
-    let chapterIndex = this.game.net.getQueryString('chapter') || 0
-    if (JSON.stringify(chapterIndex) === '{}') {
-      chapterIndex = 0
-    }
-    if (book.length - 1 >= chapterIndex) {
-      const chapter = book[chapterIndex]
-      const text = chapter.join('\n')
-      document.getElementById('text').innerHTML = text
+    const { text } = this.game._bookConfig || {}
+    const textEl = document.getElementById('text')
+    if (text) {
+      textEl.textContent = text
     }
   }
+
   render () {
     if (this.fontsReady) {
       this.state.start('Game')
@@ -39,8 +33,5 @@ export default class extends Phaser.State {
 
   fontsLoaded () {
     this.fontsReady = true
-  }
-  bookLoaded () {
-    this.bookReady = true
   }
 }
